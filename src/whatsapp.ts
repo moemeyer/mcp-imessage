@@ -1,5 +1,5 @@
 import { getWhatsAppDb } from "./whatsapp-db.js";
-import { eq, desc, sql, and, isNotNull, count } from "drizzle-orm";
+import { eq, desc, and, isNotNull, count } from "drizzle-orm";
 import {
   whatsappChatSession,
   whatsappMessage,

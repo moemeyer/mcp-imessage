@@ -13,8 +13,12 @@ export function initWhatsAppDb(dbPath: string) {
     whatsappSqlite.close();
   }
 
-  whatsappSqlite = new Database(dbPath, { readonly: true });
-  whatsappDb = drizzle(whatsappSqlite);
+  try {
+    whatsappSqlite = new Database(dbPath, { readonly: true });
+    whatsappDb = drizzle(whatsappSqlite);
+  } catch (error) {
+    throw new Error(`Failed to initialize WhatsApp database: ${error instanceof Error ? error.message : String(error)}`);
+  }
 
   return whatsappDb;
 }

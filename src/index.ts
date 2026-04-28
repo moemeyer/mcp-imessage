@@ -189,15 +189,27 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 
     case "list-whatsapp-groups": {
-      const groups = await listWhatsAppGroups();
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(groups, null, 2),
-          },
-        ],
-      };
+      try {
+        const groups = await listWhatsAppGroups();
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(groups, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error listing WhatsApp groups: ${error instanceof Error ? error.message : String(error)}`,
+            },
+          ],
+          isError: true,
+        };
+      }
     }
 
     case "get-whatsapp-messages": {
@@ -205,15 +217,27 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         chatSessionId: number;
         limit?: number;
       };
-      const messages = await getWhatsAppMessages(chatSessionId, limit || 100);
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(messages, null, 2),
-          },
-        ],
-      };
+      try {
+        const messages = await getWhatsAppMessages(chatSessionId, limit || 100);
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(messages, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error retrieving WhatsApp messages: ${error instanceof Error ? error.message : String(error)}`,
+            },
+          ],
+          isError: true,
+        };
+      }
     }
 
     case "get-user-sent-messages": {
@@ -222,43 +246,79 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         startDate?: string;
         endDate?: string;
       };
-      const messages = await getUserSentMessages(
-        chatSessionId,
-        startDate ? new Date(startDate) : undefined,
-        endDate ? new Date(endDate) : undefined
-      );
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(messages, null, 2),
-          },
-        ],
-      };
+      try {
+        const messages = await getUserSentMessages(
+          chatSessionId,
+          startDate ? new Date(startDate) : undefined,
+          endDate ? new Date(endDate) : undefined
+        );
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(messages, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error retrieving user sent messages: ${error instanceof Error ? error.message : String(error)}`,
+            },
+          ],
+          isError: true,
+        };
+      }
     }
 
     case "export-whatsapp-groups-csv": {
-      const csv = await exportGroupsToCSV();
-      return {
-        content: [
-          {
-            type: "text",
-            text: csv,
-          },
-        ],
-      };
+      try {
+        const csv = await exportGroupsToCSV();
+        return {
+          content: [
+            {
+              type: "text",
+              text: csv,
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error exporting WhatsApp groups: ${error instanceof Error ? error.message : String(error)}`,
+            },
+          ],
+          isError: true,
+        };
+      }
     }
 
     case "get-whatsapp-stats": {
-      const stats = await getWhatsAppStats();
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(stats, null, 2),
-          },
-        ],
-      };
+      try {
+        const stats = await getWhatsAppStats();
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(stats, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error retrieving WhatsApp stats: ${error instanceof Error ? error.message : String(error)}`,
+            },
+          ],
+          isError: true,
+        };
+      }
     }
 
     default:
